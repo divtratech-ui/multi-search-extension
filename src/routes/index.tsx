@@ -37,7 +37,7 @@ function Index() {
             <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-teal-400" />
             <span className="text-lg font-semibold">Multi-Search</span>
           </div>
-          <link rel="icon" type="image/x-icon" href="/favicon.ico"></link>
+          <link rel="icon" type="image/x-icon" href="/favicon.ico">
         </header>
 
         <section className="mt-20 grid items-center gap-12 sm:mt-24 sm:grid-cols-2">
