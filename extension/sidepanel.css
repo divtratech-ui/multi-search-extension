@@ -1,0 +1,165 @@
+:root {
+  --bg: #060709;
+  --panel: #131418;
+  --panel-hover: #1c1d24;
+  --text: #f0f4f9;
+  --muted: #8e9196;
+  --accent: #2b66ff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
+
+.extension-layout { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
+
+/* Ambient background styles */
+.glow-orb { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.12; pointer-events: none; z-index: 1; }
+.orb-1 { width: 160px; height: 160px; background: #2b66ff; top: 15%; left: -10%; }
+.orb-2 { width: 180px; height: 180px; background: #ff85a2; bottom: 20%; right: -10%; }
+
+/* Compact Header */
+.header { background: rgba(19, 20, 24, 0.75); backdrop-filter: blur(12px); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.query-row { display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1; }
+.label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; white-space: nowrap; }
+.query { font-weight: 500; font-size: 13px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.actions { display: flex; gap: 4px; }
+
+.icon-btn { background: transparent; color: var(--muted); border: none; border-radius: 50%; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s, color 0.2s; }
+.icon-btn svg { width: 15px; height: 15px; }
+.icon-btn:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+
+/* Content List Box wrapper with vertical scroll behavior allowed */
+.list-container { 
+  flex: 1; 
+  padding: 8px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px; 
+  overflow-y: auto; 
+  overflow-x: hidden;
+}
+
+/* --- Premium Gemini Dark Theme Scrollbars --- */
+/* For Chrome/Blink based Sidepanel layout engines */
+.list-container::-webkit-scrollbar {
+  width: 8px;
+}
+.list-container::-webkit-scrollbar-track {
+  background: transparent; /* Seamless blend */
+}
+.list-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  border: 2px solid var(--bg); /* Creates a neat padding track space */
+}
+.list-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Hide other entries entirely if an isolated item gets maximized */
+.list-container.has-maximized-item {
+  overflow-y: hidden; /* Disables container outer track scroll when focused in fullscreen */
+}
+.list-container.has-maximized-item .item-wrapper:not(.maximized) {
+  display: none !important;
+}
+
+/* Base Borderless Dynamic Accordion Row Wrapper */
+.item-wrapper { 
+  position: relative;
+  background: var(--panel); 
+  border-radius: 12px; 
+  overflow: hidden; 
+  padding: 1.5px;
+  opacity: 0;
+  transform: translateY(16px) scale(0.97);
+  animation: cardMorphIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--stagger-index) * 0.06s);
+  
+  /* Prevent layout collapse squeezing when multiple drop items open concurrently */
+  flex-shrink: 0; 
+}
+@keyframes cardMorphIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+/* Dynamic Layout Changes on Expansion States */
+.item-wrapper.open {
+  display: flex;
+  flex-direction: column;
+}
+.item-wrapper.maximized {
+  flex: 1 !important;
+  height: 100% !important;
+}
+
+.item-header {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  background: var(--panel); border: 0; padding: 10px 12px; text-align: left; color: var(--text);
+  cursor: pointer; border-radius: 11px; position: relative; z-index: 2; transition: background 0.2s;
+}
+.item-header:hover { background: var(--panel-hover); }
+
+/* Favicon Icon Customization */
+.site-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.name { flex: 1; font-weight: 500; font-size: 12.5px; color: #fff; }
+.caret { width: 12px; height: 12px; transition: transform 0.2s ease; color: var(--muted); }
+.item-wrapper.open .caret { transform: rotate(90deg); color: #9bc5ff; }
+
+/* Control Action Row Blocks inside Header */
+.item-actions { display: flex; align-items: center; gap: 4px; }
+
+.maximize-btn, .newtab {
+  background: transparent; border: none; color: var(--muted);
+  display: flex; align-items: center; padding: 5px; border-radius: 6px; cursor: pointer; transition: color 0.2s, background 0.2s;
+}
+.maximize-btn svg, .newtab svg { width: 13px; height: 13px; }
+.maximize-btn:hover, .newtab:hover { color: #fff; background: rgba(255, 255, 255, 0.06); }
+
+/* Rotates icon indicator when item window is maximized */
+.item-wrapper.maximized .max-icon {
+  transform: rotate(180deg);
+  color: #ff85a2;
+}
+
+/* --- Adjustable Size Windows with Resize Trackers --- */
+.frame-wrap { 
+  background: #fff; 
+  width: 100%;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+  
+  /* Enables native drag handling functionality */
+  height: 380px; /* Default workspace initial height */
+  min-height: 150px;
+  max-height: 85vh;
+  resize: vertical; 
+}
+.item-wrapper.maximized .frame-wrap {
+  flex: 1 !important;
+  height: 100% !important;
+  max-height: none !important;
+  resize: none; /* Turn off dynamic adjustments when filling full panel */
+}
+
+.frame-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+/* Gemini Glow systems... */
+.item-wrapper.loading-state::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; z-index: 1; background: conic-gradient(from 0deg, #9bc5ff 0%, #2b66ff 25%, #ff85a2 50%, #2b66ff 75%, #9bc5ff 100%); animation: geminiRotate 3.5s linear infinite; }
+@keyframes geminiRotate { 100% { transform: rotate(360deg); } }
+
+/* Empty Workspace Layouts... */
+.empty-state-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px; animation: floatView 6s ease-in-out infinite; }
+.spark-icon { width: 54px; height: 54px; margin-bottom: 16px; filter: drop-shadow(0 0 12px rgba(43, 102, 255, 0.3)); }
+.gradient-text { font-size: 1.35rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px; background: linear-gradient(45deg, #9bc5ff, #2b66ff, #ff85a2, #9bc5ff); background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: textShift 6s ease infinite; }
+.empty-text { font-size: 12.5px; color: var(--muted); line-height: 1.5; max-width: 240px; }
+
+@keyframes floatView { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes textShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
