@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Multi-Search — Dashboard Settings</title>
+    <style>
+      :root {
+        --bg: #060709;
+        --panel: #131418;
+        --panel-hover: #1c1d24;
+        --text: #f0f4f9;
+        --muted: #8e9196;
+        --accent: #2b66ff;
+        --accent-pink: #ff85a2;
+      }
+      
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      
+      body { 
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+        background: var(--bg); 
+        color: var(--text);
+        max-width: 760px; 
+        margin: 0 auto; 
+        padding: 50px 20px;
+        position: relative;
+        overflow-y: auto;
+      }
+
+      .glow-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; pointer-events: none; z-index: 1; }
+      .orb-1 { width: 220px; height: 220px; background: var(--accent); top: 5%; left: -10%; }
+      .orb-2 { width: 250px; height: 250px; background: var(--accent-pink); bottom: 10%; right: -10%; }
+
+      .container { position: relative; z-index: 2; }
+
+      .title-section h1 {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 6px;
+        background: linear-gradient(45deg, #9bc5ff, var(--accent), var(--accent-pink), #9bc5ff);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradientShift 6s ease infinite;
+      }
+      @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+      
+      .subtitle { color: var(--muted); font-size: 13.5px; margin-bottom: 32px; }
+      h2.section-title { font-size: 16px; font-weight: 600; margin-bottom: 14px; color: #fff; letter-spacing: -0.01em;}
+
+      .tabs { display: flex; gap: 4px; background: rgba(255, 255, 255, 0.04); padding: 4px; border-radius: 20px; width: fit-content; margin-bottom: 16px; }
+      .tab-btn { background: transparent; border: none; color: var(--muted); padding: 6px 14px; font-size: 12.5px; font-weight: 500; border-radius: 16px; cursor: pointer; transition: all 0.2s; }
+      .tab-btn.active { background: #222530; color: #fff; }
+
+      .panel-row { display: flex; align-items: center; gap: 8px; background: var(--panel); padding: 8px; border-radius: 16px; margin-bottom: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); }
+      .pill-input { background: rgba(255, 255, 255, 0.04); border: none; border-radius: 12px; padding: 10px 16px; color: #fff; font-size: 13px; outline: none; transition: all 0.2s; flex: 1; }
+      .pill-input:focus { background: rgba(255, 255, 255, 0.07); box-shadow: 0 0 0 1.5px rgba(43, 102, 255, 0.4); }
+      #new-url { flex: 2; }
+
+      .add-btn { background: #152966; color: #9bc5ff; border: none; padding: 10px 24px; font-weight: 600; font-size: 13px; border-radius: 12px; cursor: pointer; transition: all 0.2s; text-transform: lowercase; min-width: 80px; text-align: center; }
+      .add-btn:hover:not(:disabled) { background: #1b3585; color: #fff; }
+      .add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      /* --- Floating Inline Suggestions Box placed precisely in the middle --- */
+      .suggestions-inline-container {
+        display: none;
+        flex-direction: column;
+        gap: 6px;
+        background: #111216;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 10px;
+        margin-bottom: 24px;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+        animation: inlineFloatIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      @keyframes inlineFloatIn {
+        0% { opacity: 0; transform: translateY(-8px); filter: blur(4px); }
+        100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+      }
+
+      .suggestion-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+        background: transparent;
+        transition: all 0.2s ease;
+      }
+      .suggestion-item:hover {
+        background: rgba(255, 255, 255, 0.04);
+        transform: translateX(4px);
+      }
+
+      .site-favicon {
+        width: 16px; height: 16px; border-radius: 4px; object-fit: contain;
+        background: rgba(255, 255, 255, 0.04); flex-shrink: 0;
+      }
+      .sugg-text-main { font-size: 13px; font-weight: 500; color: #fff; }
+      .sugg-text-domain { font-size: 12px; color: var(--muted); margin-left: auto; font-family: monospace; }
+
+      /* --- Interactive Waiting Text Animation Layout --- */
+      .loading-ticker {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #9bc5ff;
+        margin-bottom: 20px;
+        font-weight: 500;
+        background: rgba(43, 102, 255, 0.08);
+        padding: 10px 16px;
+        border-radius: 10px;
+        width: fit-content;
+      }
+      .ticker-text {
+        background: linear-gradient(90deg, #9bc5ff, #fff, #9bc5ff);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shineTicker 2s linear infinite;
+      }
+      @keyframes shineTicker { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+      
+      .ticker-dots::after {
+        content: '';
+        animation: pulseDots 1.5s infinite;
+        color: #fff;
+      }
+      @keyframes pulseDots { 0% { content: ''; } 33% { content: '.'; } 66% { content: '..'; } 100% { content: '...'; } }
+
+      /* --- Saved Workspace List View --- */
+      .sites-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 30px; }
+      .site-card { display: grid; grid-template-columns: 24px 24px 1.5fr 3fr auto; align-items: center; gap: 14px; background: var(--panel); padding: 12px 16px; border-radius: 12px; transition: background 0.2s; }
+      .site-card:hover { background: var(--panel-hover); }
+
+      input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
+      .site-name-text { font-weight: 600; color: #fff; font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .site-url-text { color: var(--muted); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      
+      .control-group { display: flex; gap: 4px; }
+      .action-icon { background: rgba(255, 255, 255, 0.03); border: none; color: var(--muted); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s; }
+      .action-icon:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #fff; }
+      .action-icon:disabled { opacity: 0.2; cursor: not-allowed; }
+      .action-icon.del-type:hover { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+      .err { color: var(--accent-pink); font-size: 12.5px; margin-bottom: 16px; font-weight: 500; min-height: 18px; }
+    </style>
+  </head>
+  <body>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <div class="container">
+      <div class="title-section">
+        <h1>Add a Site</h1>
+        <p class="subtitle">Search for platforms online to auto-generate pattern hooks, or input parameters manually.</p>
+      </div>
+
+      <div class="tabs">
+        <button id="tab-auto" class="tab-btn active">search for a site</button>
+        <button id="tab-manual" class="tab-btn">manually enter site and link</button>
+      </div>
+
+<div>
+         <div class="panel-row">
+           <input id="new-name" class="pill-input" type="text" placeholder="enter site name (e.g. YouTube)" autocomplete="off" />
+           <input id="new-url" class="pill-input" type="url" placeholder="https://example.com/search?q={q}" style="display: none;" />
+           <button id="add-btn" class="add-btn">add</button>
+         </div>
+
+         <div id="suggestions-container" class="suggestions-inline-container"></div>
+         <div id="err" class="err"></div>
+
+         <div id="ticker" class="loading-ticker">
+           <span class="ticker-text">wait while the search query is added</span><span class="ticker-dots"></span>
+         </div>
+       </div>
+
+       <h2 class="section-title">sites</h2>
+       <div class="import-export-bar" style="display:flex; gap:8px; margin-bottom:12px;">
+         <button id="export-btn" class="add-btn" style="background:#222530; color:var(--muted); flex:1;">export sites</button>
+         <button id="import-btn" class="add-btn" style="background:#222530; color:var(--muted); flex:1;">import sites</button>
+         <input id="import-file" type="file" accept=".json" style="display:none;" />
+       </div>
+       <div id="list" class="sites-list"></div>
+     </div>
+
+    <script src="options.js"></script>
+  </body>
+</html>
