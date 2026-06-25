@@ -3,13 +3,13 @@ import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.m
 var import_jsx_runtime = require_jsx_runtime();
 function Index() {
 	const download = () => {
-		fetch("/multi-search.zip").then((res) => {
+		fetch("/multi-search v1.0.0.zip").then((res) => {
 			if (!res.ok) throw new Error(`Download failed: ${res.status}`);
 			return res.blob();
 		}).then((blob) => {
 			const a = document.createElement("a");
 			a.href = URL.createObjectURL(blob);
-			a.download = "multi-search.zip";
+			a.download = "multi-search v1.0.0.zip";
 			a.click();
 			URL.revokeObjectURL(a.href);
 		}).catch((err) => alert(err.message));
