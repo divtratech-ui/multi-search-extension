@@ -14,7 +14,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const download = () => {
-    fetch("/multi-search.zip")
+    fetch("/multi-search v1.0.0.zip")
       .then((res) => {
         if (!res.ok) throw new Error(`Download failed: ${res.status}`);
         return res.blob();
@@ -22,7 +22,7 @@ function Index() {
       .then((blob) => {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = "multi-search.zip";
+        a.download = "multi-search v1.0.0.zip";
         a.click();
         URL.revokeObjectURL(a.href);
       })
