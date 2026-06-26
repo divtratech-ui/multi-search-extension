@@ -1,7 +1,44 @@
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DkpHMm9F.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes--86CDI_1.js
 var import_jsx_runtime = require_jsx_runtime();
 function Index() {
+	const visualInstructions = [
+		{
+			id: 1,
+			text: "Click on the settings icon to get to add your sites",
+			imgSrc: "/Screenshot 2026-06-26 110848.png"
+		},
+		{
+			id: 2,
+			text: "For manual addition, go to you desiresd site make a search and find the website URL. Note: this only works for sites that have search functionality available and a search query URL like 'https://www.google.com/search?q=' when searched. sites like steam, chatgpt and gemini don't have a search URL for sites like that use the auto method",
+			imgSrc: "/Screenshot 2026-06-26 111016.png"
+		},
+		{
+			id: 3,
+			text: "Copy and paste the URL of the search query URL of the site and replace the word you searched with {q}, click add and your site will be added.",
+			imgSrc: "/Screenshot 2026-06-26 110818.png"
+		},
+		{
+			id: 4,
+			text: "For automatic addition, simply enter the domain name of the site you want to add and click on it in the suggestion dropdown. Note: this method is preferred for sites that don't produce a search URL or have a search URL pattern. If your site has a URL pattern it is recommeded to use the first method.",
+			imgSrc: "/Screenshot 2026-06-26 111041.png"
+		},
+		{
+			id: 5,
+			text: "Once you've selected your site, click the 'Add' button. Note: it is preferable to input the full URL instead of just the name .e.g. put in claude.ai instead of just claude.",
+			imgSrc: "/Screenshot 2026-06-26 122035.png"
+		},
+		{
+			id: 6,
+			text: "Once you've clicked add, your site will be opened in a new tab to get the search query or find the search bar. please remain on the page to complete the process as the tab will not close automatically if you open and stay on it.",
+			imgSrc: "/Screenshot 2026-06-26 111111.png"
+		},
+		{
+			id: 7,
+			text: "Once the extension has found the search query or has read the page, your site will be added. Once your sites are added you can export them to use in other browsers instead of recreating your site list.",
+			imgSrc: "/Screenshot 2026-06-26 111217.png"
+		}
+	];
 	const download = () => {
 		fetch("/multi-search v1.0.0.zip").then((res) => {
 			if (!res.ok) throw new Error(`Download failed: ${res.status}`);
@@ -41,7 +78,7 @@ function Index() {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "mt-5 text-lg text-slate-300",
-							children: "A Chrome extension that turns any text selection into instant results from Google and your favourite sites — all in one side panel. No new tabs."
+							children: "An extension that turns any text selection into instant results from Google and your favourite sites — all in one side panel. No new tabs."
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "mt-8 flex flex-wrap items-center gap-3",
@@ -165,7 +202,7 @@ function Index() {
 									" Open ",
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", {
 										className: "rounded bg-slate-800 px-1.5 py-0.5 text-sm",
-										children: "chrome://extensions"
+										children: "manage extensions"
 									}),
 									" in your browser."
 								] }),
@@ -208,23 +245,38 @@ function Index() {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 					className: "mt-24",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-						className: "text-2xl font-semibold",
-						children: "Configure your sites"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-						className: "mt-3 max-w-2xl text-slate-300",
-						children: [
-							"Right-click the extension icon → ",
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "font-semibold",
-								children: "Options"
-							}),
-							" to add, reorder, or disable sites. Each site is a name plus a URL template containing ",
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", {
-								className: "rounded bg-slate-800 px-1.5 py-0.5 text-sm",
-								children: "{q}"
-							}),
-							" where your highlighted text goes."
-						]
+						className: "text-2xl font-semibold mb-8",
+						children: "Detailed Setup Walkthrough"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "space-y-12",
+						children: visualInstructions.map((step) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-col rounded-2xl border border-slate-800 bg-slate-900/30 p-6 sm:p-8",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mb-4 text-xs font-bold text-indigo-400 uppercase tracking-widest",
+									children: ["Step 0", step.id]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-full rounded-xl border border-slate-800/80 bg-slate-950 overflow-hidden flex items-center justify-center shadow-inner",
+									children: step.imgSrc ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+										src: step.imgSrc,
+										alt: `Step ${step.id} detailed screenshot`,
+										className: "w-full h-auto block object-contain"
+									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "py-20 text-sm italic text-slate-600",
+										children: [
+											"Placeholder for 1366x768 Step ",
+											step.id,
+											" Image"
+										]
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-6 text-base text-slate-200 leading-relaxed max-w-3xl",
+									children: step.text
+								})
+							]
+						}, step.id))
 					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {

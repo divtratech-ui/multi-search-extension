@@ -13,6 +13,17 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  // PRESET FOR YOUR 7 LARGE IMAGES AND INSTRUCTIONS
+  const visualInstructions = [
+    { id: 1, text: "Click on the settings icon to get to add your sites", imgSrc: "/Screenshot 2026-06-26 110848.png" },
+    { id: 2, text: "For manual addition, go to you desiresd site make a search and find the website URL. Note: this only works for sites that have search functionality available and a search query URL like 'https://www.google.com/search?q=' when searched. sites like steam, chatgpt and gemini don't have a search URL for sites like that use the auto method", imgSrc: "/Screenshot 2026-06-26 111016.png" },
+    { id: 3, text: "Copy and paste the URL of the search query URL of the site and replace the word you searched with {q}, click add and your site will be added.", imgSrc: "/Screenshot 2026-06-26 110818.png" },
+    { id: 4, text: "For automatic addition, simply enter the domain name of the site you want to add and click on it in the suggestion dropdown. Note: this method is preferred for sites that don't produce a search URL or have a search URL pattern. If your site has a URL pattern it is recommeded to use the first method.", imgSrc: "/Screenshot 2026-06-26 111041.png" },
+    { id: 5, text: "Once you've selected your site, click the 'Add' button. Note: it is preferable to input the full URL instead of just the name .e.g. put in claude.ai instead of just claude.", imgSrc: "/Screenshot 2026-06-26 122035.png" },
+    { id: 6, text: "Once you've clicked add, your site will be opened in a new tab to get the search query or find the search bar. please remain on the page to complete the process as the tab will not close automatically if you open and stay on it.", imgSrc: "/Screenshot 2026-06-26 111111.png" },
+    { id: 7, text: "Once the extension has found the search query or has read the page, your site will be added. Once your sites are added you can export them to use in other browsers instead of recreating your site list.", imgSrc: "/Screenshot 2026-06-26 111217.png" },
+  ];
+
   const download = () => {
     fetch("/multi-search v1.0.0.zip")
       .then((res) => {
@@ -45,7 +56,7 @@ function Index() {
               Highlight text. <span className="bg-gradient-to-r from-indigo-400 to-teal-300 bg-clip-text text-transparent">Search everywhere.</span>
             </h1>
             <p className="mt-5 text-lg text-slate-300">
-              A Chrome extension that turns any text selection into instant results from Google and your favourite sites — all in one side panel. No new tabs.
+              An extension that turns any text selection into instant results from Google and your favourite sites — all in one side panel. No new tabs.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <button
@@ -103,7 +114,7 @@ function Index() {
           <h2 className="text-2xl font-semibold">Install</h2>
           <ol className="mt-6 space-y-3 text-slate-300">
             <li><span className="font-semibold text-slate-100">1.</span> Download and unzip the extension.</li>
-            <li><span className="font-semibold text-slate-100">2.</span> Open <code className="rounded bg-slate-800 px-1.5 py-0.5 text-sm">chrome://extensions</code> in your browser.</li>
+            <li><span className="font-semibold text-slate-100">2.</span> Open <code className="rounded bg-slate-800 px-1.5 py-0.5 text-sm">manage extensions</code> in your browser.</li>
             <li><span className="font-semibold text-slate-100">3.</span> Enable <span className="font-semibold">Developer mode</span> (top-right toggle).</li>
             <li><span className="font-semibold text-slate-100">4.</span> Click <span className="font-semibold">Load unpacked</span> and select the unzipped folder.</li>
             <li><span className="font-semibold text-slate-100">5.</span> Highlight text on any page — the side panel will appear with your results.</li>
@@ -113,11 +124,37 @@ function Index() {
           </p>
         </section>
 
+        {/* UPDATED SECTION: FULL WIDTH SINGLE COLUMN LAYOUT FOR 1366x768 IMAGES */}
         <section className="mt-24">
-          <h2 className="text-2xl font-semibold">Configure your sites</h2>
-          <p className="mt-3 max-w-2xl text-slate-300">
-            Right-click the extension icon → <span className="font-semibold">Options</span> to add, reorder, or disable sites. Each site is a name plus a URL template containing <code className="rounded bg-slate-800 px-1.5 py-0.5 text-sm">{"{q}"}</code> where your highlighted text goes.
-          </p>
+          <h2 className="text-2xl font-semibold mb-8">Detailed Setup Walkthrough</h2>
+          <div className="space-y-12">
+            {visualInstructions.map((step) => (
+              <div key={step.id} className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/30 p-6 sm:p-8">
+                <div className="mb-4 text-xs font-bold text-indigo-400 uppercase tracking-widest">
+                  Step 0{step.id}
+                </div>
+                
+                {/* Full-width Image Frame */}
+                <div className="w-full rounded-xl border border-slate-800/80 bg-slate-950 overflow-hidden flex items-center justify-center shadow-inner">
+                  {step.imgSrc ? (
+                    <img 
+                      src={step.imgSrc} 
+                      alt={`Step ${step.id} detailed screenshot`} 
+                      className="w-full h-auto block object-contain"
+                    />
+                  ) : (
+                    <div className="py-20 text-sm italic text-slate-600">
+                      Placeholder for 1366x768 Step {step.id} Image
+                    </div>
+                  )}
+                </div>
+
+                <p className="mt-6 text-base text-slate-200 leading-relaxed max-w-3xl">
+                  {step.text}
+                </p>
+              </div>
+            ))}
+          </div>
         </section>
 
         <footer className="mt-24 border-t border-slate-800 pt-8 text-xs text-slate-500">
